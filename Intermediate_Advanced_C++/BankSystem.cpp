@@ -112,17 +112,17 @@ void BankMenu(const string& username) {
 	if (!balances.count(username)) balances[username] = 0.0;
 	
 
-	int choise;
+	int choice = 0;
 	double amount;
 
 
 	while (true) {
 		cout << "\n======== Bank Menu =========\n";
 		cout << "1. View Balance\n2. Deposit\n3. Withdraw\n4. View Transaction History \n5. Logging out \nchoose: ";
-		cin >> choise;
+		cin >> choice;
 
 
-		switch (choise) {
+		switch (choice) {
 		case 1: 
 			cout << "Yor Balance: $" << balances[username] << endl;
 			break;
@@ -173,38 +173,37 @@ void BankMenu(const string& username) {
 	}
 }
 
-void adminMenu() {
-	int choice;
+void AdminMenu() {
+	int choice = 0;
+
 	while (true) {
-		cout << "\n=== Admin Menu ===\n";
-		cout << "1. View All Users\n";
-		cout << "2. View All Balances\n";
-		cout << "3. View User Transaction History\n";
-		cout << "4. Logout\nChoose: ";
+		cout << "\n======= Bank Admin Menu ========\n";
+		cout << "1. View All Users\n 2. View All Balances\n 3. View All Transactions\n 4. Loging out\nChoose: ";
 		cin >> choice;
 
 		if (choice == 1) {
 			unordered_map<string, string> users = LoadUsers();
-			cout << "\nRegistered Users:\n";
+
 			for (auto& u : users) {
-				cout << "- " << u.first << endl;
+				cout << u.first << endl;
 			}
 		}
 		else if (choice == 2) {
 			unordered_map<string, double> balances = LoadBalance();
-			cout << "\nUser Balances:\n";
-			for (auto& b : balances) {
-				cout << b.first << ": $" << b.second << endl;
+			for (auto& b : balances){
+				cout << b.first << " " << b.second << endl;
 			}
 		}
 		else if (choice == 3) {
 			string targetUser;
-			cout << "Enter username to view history: ";
+			cout << "Enter username to view transactions: ";
 			cin >> targetUser;
-			string filename = "transactions/" + targetUser + "_history.txt";
+
+			string filename = "transactions" + targetUser + "history.txt";
 			ifstream file(filename);
+
 			string line;
-			cout << "\nTransaction History for " << targetUser << ":\n";
+
 			if (file.is_open()) {
 				while (getline(file, line)) {
 					cout << line << endl;
@@ -212,22 +211,23 @@ void adminMenu() {
 				file.close();
 			}
 			else {
-				cout << "No history found for that user.\n";
+				cout << "No history found for this user.\n";
 			}
+
+
 		}
 		else if (choice == 4) {
-			cout << "Logging out admin...\n";
+			cout << "Logging out of Admin Menu...\n";
 			return;
 		}
 		else {
-			cout << "Invalid choice.\n";
+			cout << "Invalid option.\n";
 		}
 	}
 }
 
-
 int main() {
-	int choice;
+	int choice = 0;
 	bool is_Running = true;
 
 	while (is_Running) {
@@ -242,7 +242,7 @@ int main() {
 			string user = LoginUser();
 			if (!user.empty()) {
 				if (user == is_Admin) {
-					adminMenu();
+					AdminMenu();
 				}
 				else {
 				BankMenu(user);
